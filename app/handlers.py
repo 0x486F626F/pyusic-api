@@ -6,15 +6,73 @@ import flask
 def index():
     return "Hello"
 
-@app.route('/music/add/<uid>')
+@app.route('/music/info/<uid>')
 def add_youtube_audio(uid):
     collection = db['pyusic']['youtube']
 
     music = collection.find_one({'id': uid})
-    if music is not None:
-        music.pop('_id')
-        return flask.jsonify(music)
+    if music is None:
+        music = models.YoutubeAudio(uid)
+        music.update(collection)
+    else:
+        music = models.YoutubeAudio(music)
 
-    music = models.YoutubeAudio(uid)
-    music.update(collection)
-    return flask.jsonify(music.serialize())
+    return flask.jsonify(music.serialize)
+
+@app.route('/music/info/<uid>/<key>')
+def get_info(uid, key):
+    collection = db['pyusic']['youtube']
+
+    music = collection.find_one({'id': uid})
+    if music is None:
+        return '{}'
+
+    if key in music:
+        return flask.jsonify({key: music[key]})
+
+    return '{}'
+
+@app.route('/music/info/modify/<uid>/<key>/<value>')
+def modify_info(uid, key, value):
+    collection = db['pyusic']['youtube']
+
+    music = collection.find_one({'id': uid})
+    if music is None:
+        return '{}'
+
+    if key in music and type(music[key]) is str:
+        music[key] = value
+        music = models.YoutubeAudio(music)
+        music.update(collection)
+
+    return flask.jsonify(music.serialize)
+
+@app.route('/music/info/add_tag/<uid>/<tag>')
+def add_tag(uid, tag):
+    collection = db['pyusic']['youtube']
+
+    music = collection.find_one({'id': uid})
+    if music is None:
+        return '{}'
+
+    music = models.YoutubeAudio(music)
+    if tag not in music.tags:
+        music.tags.append(tag)
+        music.update(collection)
+
+    return flask.jsonify({'tags': music.tags})
+
+@app.route('/music/info/del_tag/<uid>/<tag>')
+def del_tag(uid, tag):
+    collection = db['pyusic']['youtube']
+
+    music = collection.find_one({'id': uid})
+    if music is None:
+        return '{}'
+
+    music = models.YoutubeAudio(music)
+    if tag in music.tags:
+        music.tags.remove(tag)
+        music.update(collection)
+
+    return flask.jsonify({'tags': music.tags})
