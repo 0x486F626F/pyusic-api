@@ -2,8 +2,6 @@ from __future__ import unicode_literals
 
 import youtube_dl
 
-url = 'https://www.youtube.com/watch?v=jzGaS5kWj0U'
-
 class YoutubeAudio:
     def __init__(self, url):
         options = {'format': 'm4a/best'}
