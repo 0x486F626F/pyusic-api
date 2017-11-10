@@ -76,3 +76,18 @@ def del_tag(uid, tag):
         music.update(collection)
 
     return flask.jsonify({'tags': music.tags})
+
+@app.route('/music/search')
+def search():
+    collection = db['pyusic']['youtube']
+
+    search_filter = {}
+
+    tags = flask.request.args.get('tags')
+    if tags is not None:
+        search_filter['tags'] = {'$in': tags.split(',')}
+
+    music_info_list = collection.find(search_filter)
+    
+    musics_json = [models.YoutubeAudio(music).serialize for music in music_info_list]
+    return flask.jsonify(musics_json)
