@@ -95,6 +95,6 @@ def search():
         search_filter['tags'] = {'$in': tags.split(',')}
 
     music_info_list = collection.find(search_filter)
-    
-    musics_json = [models.YoutubeAudio(music).serialize for music in music_info_list]
+    musics = [models.YoutubeAudio(info) for info in music_info_list]
+    musics_json = [music.serialize for music in musics]
     return flask.jsonify(musics_json)

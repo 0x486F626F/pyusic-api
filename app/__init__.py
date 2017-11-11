@@ -9,4 +9,10 @@ app.config['JSON_AS_ASCII'] = False
 
 db = MongoClient('mongodb://hongbozhang.me:6668')
 
+import config
+import threading
+
+url_updater = threading.Thread(target=config.update_all_audio_url, args=(db,))
+url_updater.start()
+
 from app import handlers, models

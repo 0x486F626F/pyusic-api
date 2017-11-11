@@ -6,10 +6,13 @@ class YoutubeAudio:
     def __init__(self, param):
         info = param
         if type(param) is str:
-            options = {'format': 'm4a/best'}
-            ydl = youtube_dl.YoutubeDL(options)
-            info = ydl.extract_info(param, download=False)
+            info = self.get_youtube_info(param)
         self.init_by_dict(info)
+
+    def get_youtube_info(self, uid):
+        options = {'format': 'm4a/best'}
+        ydl = youtube_dl.YoutubeDL(options)
+        return ydl.extract_info(uid, download=False)
 
     def init_by_dict(self, info):
         self.id = info['id']
@@ -28,6 +31,13 @@ class YoutubeAudio:
             self.audio_url = info['audio_url']
         self.tags = info['tags']
         self.thumbnail = info['thumbnail']
+
+    def update_audio_url(self):
+        info = self.get_youtube_info(self.id)
+        if 'url' not in info:
+            return False
+        self.audio_url = info['url']
+        return True
 
     @property
     def serialize(self):
