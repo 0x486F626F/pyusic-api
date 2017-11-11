@@ -13,6 +13,12 @@ def add_youtube_audio(uid):
     music = collection.find_one({'id': uid})
     if music is None:
         music = models.YoutubeAudio(uid)
+        title = flask.request.args.get('title')
+        artist = flask.request.args.get('artist')
+        if title is not None:
+            music.title = title
+        if artist is not None:
+            music.artist = artist
         music.update(collection)
     else:
         music = models.YoutubeAudio(music)
@@ -42,8 +48,9 @@ def modify_info(uid, key, value):
 
     if key in music and type(music[key]) is str:
         music[key] = value
-        music = models.YoutubeAudio(music)
-        music.update(collection)
+
+    music = models.YoutubeAudio(music)
+    music.update(collection)
 
     return flask.jsonify(music.serialize)
 

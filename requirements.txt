@@ -1,3 +1,4 @@
 youtube-dl
 flask
+flask-cors
 pymongo
