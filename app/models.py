@@ -10,7 +10,7 @@ class YoutubeAudio:
         self.init_by_dict(info)
 
     def get_youtube_info(self, uid):
-        options = {'format': 'm4a/best'}
+        options = {'format': 'm4a/best', 'ignoreerrors': True}
         ydl = youtube_dl.YoutubeDL(options)
         return ydl.extract_info(uid, download=False)
 
