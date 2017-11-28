@@ -33,11 +33,14 @@ class YoutubeAudio:
         self.thumbnail = info['thumbnail']
 
     def update_audio_url(self):
-        info = self.get_youtube_info(self.id)
-        if 'url' not in info:
+        try:
+            info = self.get_youtube_info(self.id)
+            if 'url' not in info:
+                return False
+            self.audio_url = info['url']
+            return True
+        except:
             return False
-        self.audio_url = info['url']
-        return True
 
     @property
     def serialize(self):

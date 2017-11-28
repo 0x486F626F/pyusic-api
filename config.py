@@ -10,4 +10,4 @@ def update_all_audio_url(db):
             music.update(collection)
             time.sleep(1)
     print('All audio url updated')
-    time.sleep(900)
+    time.sleep(3600)
