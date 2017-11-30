@@ -6,6 +6,12 @@ import flask
 def index():
     return "Hello"
 
+@app.route('/music/delete/<uid>')
+def del_youtube_audio(uid):
+    collection = db['pyusic']['youtube']
+    result = collection.delete_one({'id': uid})
+    return flask.jsonify({'deleted': result.deleted_count})
+
 @app.route('/music/info/<uid>')
 def add_youtube_audio(uid):
     collection = db['pyusic']['youtube']
