@@ -4,11 +4,9 @@ services:
         image: mongo:latest
         restart: always
         volumes:
-            - /data/pyusic/data:/data
+            - /data/pyusic/data:/data/db
     pyusic-api:
-        build:
-            context: ./
-            dockerfile: Dockerfile
+        image: hongbozhang/pyusic-api
         ports:
             - 5000:5000
         restart: always
