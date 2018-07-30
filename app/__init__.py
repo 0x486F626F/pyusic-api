@@ -7,7 +7,7 @@ CORS(app)
 app.config.from_object('config')
 app.config['JSON_AS_ASCII'] = False
 
-db = MongoClient('mongodb://hongbozhang.me:6668')
+db = MongoClient('mongodb://mongo:27017')
 
 import config
 import threading
